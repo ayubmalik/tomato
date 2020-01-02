@@ -32,5 +32,7 @@ func New(w io.Writer, d time.Duration) chan int {
 }
 
 func write(w io.Writer, remaining int) {
-	io.WriteString(w, fmt.Sprintf("%d", remaining))
+	d := time.Duration(remaining) * time.Second
+	s := fmt.Sprintf("\033[1K\r\033[38;5;226;7;1m%s\033[0m", d)
+	io.WriteString(w, s)
 }
