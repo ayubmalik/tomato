@@ -6,14 +6,15 @@ import (
 	"time"
 )
 
-// New starts timer and returns a channel which will be closed after n secs
-func New(w io.Writer, n int) chan int {
+// New starts timer and returns a channel which will be closed after remaining secs
+func New(w io.Writer, d time.Duration) chan int {
 	quit := make(chan int)
 	ticker := time.NewTicker(1 * time.Second)
-	d := time.Duration(n) * time.Second
+	remaining := int(d / time.Second)
+	write(w, remaining)
 	go func() {
 		time.AfterFunc(d, func() {
-			defer ticker.Stop()
+			ticker.Stop()
 			close(quit)
 		})
 
@@ -22,10 +23,14 @@ func New(w io.Writer, n int) chan int {
 			case <-quit:
 				return
 			case <-ticker.C:
-				n--
-				io.WriteString(w, fmt.Sprintf("%d", n))
+				remaining--
+				write(w, remaining)
 			}
 		}
 	}()
 	return quit
+}
+
+func write(w io.Writer, remaining int) {
+	io.WriteString(w, fmt.Sprintf("%d", remaining))
 }
