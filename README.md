@@ -1,5 +1,5 @@
 # 🍅 tomato
-Tomato is a simple pomodoro timer built using Go.
+Tomato is a simple [pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) timer built using Go.
 
 ## Usage
 
@@ -12,3 +12,6 @@ To change the duration of the timer use the time flag with a duration e.g. 30m, 
 ```
 tomato -time 5m
 ```
+
+# TODO
+ * Add repeats and interval
