@@ -29,10 +29,6 @@ func main() {
 
 	tom := tomato.New(os.Stdout, d)
 	<-tom
-	notify()
-}
-
-func notify() {
 	reset()
 }
 

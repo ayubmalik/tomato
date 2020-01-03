@@ -6,7 +6,8 @@ import (
 	"time"
 )
 
-// New starts timer and returns a channel which will be closed after remaining secs
+// New starts timer and returns a channel which will be closed after duration d.
+// After d the screen fill flash.
 func New(w io.Writer, d time.Duration) chan int {
 	quit := make(chan int)
 	ticker := time.NewTicker(1 * time.Second)
@@ -15,7 +16,7 @@ func New(w io.Writer, d time.Duration) chan int {
 	go func() {
 		time.AfterFunc(d, func() {
 			ticker.Stop()
-			io.WriteString(w, "\033[0m")
+			flash(w)
 			close(quit)
 		})
 
@@ -34,7 +35,17 @@ func New(w io.Writer, d time.Duration) chan int {
 
 // Reset terminal ANSI sequences
 func Reset(w io.Writer) {
+	io.WriteString(w, "\033[?5l")
 	io.WriteString(w, "\033[0m")
+}
+
+func flash(w io.Writer) {
+	for i := 0; i < 3; i++ {
+		io.WriteString(w, "\033[?5h")
+		time.Sleep(time.Millisecond * 500)
+		io.WriteString(w, "\033[?5l")
+		time.Sleep(time.Millisecond * 500)
+	}
 }
 
 func write(w io.Writer, remaining int) {
