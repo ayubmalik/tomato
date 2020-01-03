@@ -41,8 +41,10 @@ func Reset(w io.Writer) {
 
 func flash(w io.Writer) {
 	for i := 0; i < 3; i++ {
+		io.WriteString(w, "\033]0;!!! TOMATO FINISHED !!!\033\\")
 		io.WriteString(w, "\033[?5h")
 		time.Sleep(time.Millisecond * 500)
+		io.WriteString(w, "\033]0;\033\\")
 		io.WriteString(w, "\033[?5l")
 		time.Sleep(time.Millisecond * 500)
 	}
