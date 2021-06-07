@@ -52,7 +52,7 @@ func flash(w io.Writer) {
 }
 
 func bell(w io.Writer) {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 2; i++ {
 		io.WriteString(w, "\a")
 		time.Sleep(time.Millisecond * 500)
 	}
